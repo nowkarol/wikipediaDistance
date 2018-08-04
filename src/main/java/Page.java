@@ -1,36 +1,47 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 
 class Page {
+    private final URL url;
     private final String content;
+    private PageDownloader downloader;
 
-    Page(String content) {
+    Page(URL url, String content){
+        this.url = url;
         this.content = content;
-    }
-
-    Page(URL url) {
-        content = downloadContent(url);
-    }
-
-    private String downloadContent(URL url) {
-        StringBuilder site = new StringBuilder();
-        try (InputStream inputStream = url.openStream();
-             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                site.append(line);
+        this.downloader = new PageDownloader(){
+            @Override
+            String downloadContent(URL url) {
+                return "";
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return site.toString();
+        };
     }
 
+    Page(URL url){
+        this(url, new PageDownloader());
+    }
+
+    Page(URL url, PageDownloader downloader){
+        this(url, downloader.downloadContent(url));
+        this.downloader = downloader;
+    }
+
+
+
+
+    @Override
+    public String toString() {
+        return "Page{" + "url=" + url + ", content='" + content + '\'' + '}';
+    }
+
+    URL getUrl() {
+        return url;
+    }
 
     String getContent() {
         return content;
+    }
+
+    Page newPageWithSameDownloader(URL url) {
+        return new Page(url, downloader);
     }
 }
