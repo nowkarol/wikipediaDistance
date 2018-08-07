@@ -4,33 +4,31 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 class Crawler {
-    private static final int DEFAULT_MAX_DEPTH_LEVEL = 10;
     private final int maxDepth;
+    private final PageDownloader downloader;
+    private static final int DEFAULT_DEPTH = 10;
 
-    Crawler(){
-        this(DEFAULT_MAX_DEPTH_LEVEL);
-    }
-
-    Crawler(int maxDepth) {
+    Crawler(int maxDepth, PageDownloader downloader) {
         this.maxDepth = maxDepth;
+        this.downloader = downloader;
     }
 
-    public List<LinkedUrl> crawl(Page page) {
-        return crawlWithDepth(page, 0);
+    public List<LinkedUrl> crawl(URL url) {
+        return crawlWithDepth(url, 0);
     }
 
 
-    private List<LinkedUrl> crawlWithDepth(Page page, int depthLevel) {
-        System.out.println("Depth:"+ depthLevel+" Crawling page:"+page);
+    private List<LinkedUrl> crawlWithDepth(URL url, int depthLevel) {
         int nextDepthLevel = depthLevel + 1;
         if (depthLevel >= maxDepth) return Collections.emptyList();
 
-        UrlFinder finder = new UrlFinder(page.getContent());
+        String pageContent = downloader.downloadContent(url);
+        UrlFinder finder = new UrlFinder(pageContent);
         List<URL> urlsOnPage = finder.findAll();
-        List<LinkedUrl> urls = LinkedUrl.createFromParent(page.getUrl(), urlsOnPage);
+        List<LinkedUrl> urls = LinkedUrl.createFromParent(url, urlsOnPage);
         List<LinkedUrl> urlsToAdd = urlsOnPage.stream()
-                .map(page::newPageWithSameDownloader)
-                .map(newPage -> crawlWithDepth(newPage, nextDepthLevel))
+                .peek(urlToProcess -> System.out.println("Depth:"+ depthLevel+" Crawling page:"+urlToProcess + " reached by:"+url))
+                .map(urlToProcess -> crawlWithDepth(urlToProcess, nextDepthLevel))
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
 
