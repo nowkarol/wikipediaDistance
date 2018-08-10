@@ -1,3 +1,5 @@
+import downloader.PageDownloader
+import finder.RegexUrlFinder
 import spock.lang.Specification
 
 class CrawlerTest extends Specification {

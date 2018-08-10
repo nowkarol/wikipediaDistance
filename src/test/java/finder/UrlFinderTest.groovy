@@ -1,10 +1,14 @@
+package finder
+
 import spock.lang.Specification
 
-class RegexUrlFinderTest extends Specification {
+abstract class UrlFinderTest extends Specification {
+
+    abstract UrlFinder getUrlFinder()
 
     UrlFinder urlFinder
     def setup(){
-        urlFinder = new RegexUrlFinder()
+        urlFinder = getUrlFinder()
     }
 
     def "should find http Url in String containing only url in quotations"() {
@@ -27,7 +31,7 @@ class RegexUrlFinderTest extends Specification {
         List<URL> urls = urlFinder.findAll(onlyUrl)
 
         then:
-        urls.size == 0
+        urls.size() == 0
     }
 
     def "should find three http Urls in String containing them and not Urls"() {

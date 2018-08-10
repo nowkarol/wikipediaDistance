@@ -1,4 +1,5 @@
 import downloader.SimplePageDownloader;
+import finder.NaiveUrlFinder;
 import finder.RegexUrlFinder;
 
 import java.net.MalformedURLException;
