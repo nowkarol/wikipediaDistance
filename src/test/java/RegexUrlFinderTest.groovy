@@ -1,14 +1,18 @@
 import spock.lang.Specification
 
-class UrlFinderTest extends Specification {
+class RegexUrlFinderTest extends Specification {
+
+    UrlFinder urlFinder
+    def setup(){
+        urlFinder = new RegexUrlFinder()
+    }
 
     def "should find http Url in String containing only url in quotations"() {
         given:
         def onlyUrlWithQuotations = '"http://karolnowak.net"'
-        def urlFinder = new UrlFinder(onlyUrlWithQuotations)
 
         when:
-        List<URL> urls = urlFinder.findAll()
+        List<URL> urls = urlFinder.findAll(onlyUrlWithQuotations)
 
         then:
         urls.size == 1
@@ -18,10 +22,9 @@ class UrlFinderTest extends Specification {
     def "should NOT find http Url in String containing only url WITHOUT quotations"(){
         given:
         def onlyUrl = 'http://karolnowak.net'
-        def urlFinder = new UrlFinder(onlyUrl)
 
         when:
-        List<URL> urls = urlFinder.findAll()
+        List<URL> urls = urlFinder.findAll(onlyUrl)
 
         then:
         urls.size == 0
@@ -33,10 +36,9 @@ class UrlFinderTest extends Specification {
                 '</style>}"http://google.pl"<style>body,td,a,p,.h{font-family:arial,sans-serif}body{margin:0;overflow-y:scroll}#gog{padding:3px 8px 0}td{line-height:.8em}.gac_m td{line-height:17px}form{margin-bottom:20px}.h{color:#36c}.q{color:#00c}.ts td{padding:0}.ts{border-collapse:collapse}em{font-weight:bold;font-style:normal}.lst{height:25px;width:496px}.gsfi,.lst{font:18px arial,sans-serif}.gsfs{font:17px arial,sans-serif}.ds{display:inline-box;display:inline-block;margin:3px 0 4px;margin-left:4px}input{font-family:inherit}a.gb1,a.gb2,a.gb3,a.gb4{color:#11c !important}body{background:#fff;color:black}a{color:#11c;text-decoration:none}a:hover,a:active{text-decoration:underline}.fl a{color:#36c}a:visited{color:#551a8b}a.gb1,a.gb4{text-decoration:underline}a.gb3:hover{text-decoration:none}#ghead a.gb2:hover{color:#fff !important}.sblc{padding-top:5px}.sblc a{display:block;margin:2px 0;margin-left:13px;font-size:11px}.lsbb{background:#eee;border:solid 1px;border-color:#ccc #999 #999 #ccc;height:30px}.lsbb{display:block}.ftl,#fll a{display:inline-block;margin:0 12px}.lsb{background:url(/images/nav_logo229.png) 0 -261px repeat-x;border:none;color:#000;cursor:pointer;height:30px;margin:0;outline:0;font:15px arial,sans-serif;vertical-align:top}.lsb:active{background:#ccc}.lst:focus{outline:none}.tiah{width:458px}</style><script nonce="UfQxlzPH0VVm518bD3p60g=="></script><link href="/images/branding/product/ico/googleg_lodp.ico" rel="shortcut icon"></head><body bgcolor="#fff"><script nonce="UfQxlzPH0VVm518bD3p60g==">(function(){var src=\'/images/nav_logo229.png\';var iesg=false;document.body.onload = function(){window.n && window.n();if (document.images){new Image().src=src;}\n' +
                 'if (!iesg){document.f&&document.f.q.focus();document.gbqf&&document.gbqf.q.focus();}\n' +
                 '} : "http://karolnowak.net"'
-        def urlFinder = new UrlFinder(threeUrlsAndGarbage)
 
         when:
-        List<URL> urls = urlFinder.findAll()
+        List<URL> urls = urlFinder.findAll(threeUrlsAndGarbage)
 
         then:
         urls.size == 3
@@ -47,4 +49,3 @@ class UrlFinderTest extends Specification {
 
 
 }
-

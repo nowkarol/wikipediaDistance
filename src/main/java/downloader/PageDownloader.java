@@ -1,3 +1,5 @@
+package downloader;
+
 import java.net.URL;
 
 public interface PageDownloader {

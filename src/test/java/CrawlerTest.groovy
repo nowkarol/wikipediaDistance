@@ -6,7 +6,7 @@ class CrawlerTest extends Specification {
         def sourceUrl = new URL("http://www.first.pl")
 
         when:
-        List<LinkedUrl> result = new Crawler(1, stubPageDownloader()).crawl(sourceUrl)
+        List<LinkedUrl> result = new Crawler(1, stubPageDownloader(), new RegexUrlFinder()).crawl(sourceUrl)
 
         then:
         result.size() == 2
@@ -20,7 +20,7 @@ class CrawlerTest extends Specification {
 
 
         when:
-        List<LinkedUrl> result = new Crawler(2, stubPageDownloader()).crawl(sourceUrl)
+        List<LinkedUrl> result = new Crawler(2, stubPageDownloader(), new RegexUrlFinder()).crawl(sourceUrl)
 
         then:
         result.size() == 6
@@ -38,7 +38,7 @@ class CrawlerTest extends Specification {
 
         when:
 
-        List<LinkedUrl> result = new Crawler(1, stubPageDownloader()).crawl(sourceUrl)
+        List<LinkedUrl> result = new Crawler(1, stubPageDownloader(), new RegexUrlFinder()).crawl(sourceUrl)
 
         then:
         result.size() == 2
@@ -65,7 +65,7 @@ class CrawlerTest extends Specification {
             }
         }
         when:
-        List<LinkedUrl> result = new Crawler(10, stubDownloaderWithCycle).crawl(sourceUrl)
+        List<LinkedUrl> result = new Crawler(10, stubDownloaderWithCycle, new RegexUrlFinder()).crawl(sourceUrl)
 
         then:
         result.size() == 2
