@@ -9,7 +9,7 @@ import spock.lang.Specification
 abstract class CrawlerTest extends Specification {
     abstract Crawler getCrawler(int maxDepth, PageDownloader downloader, UrlFinder urlFinder)
 
-    def "should follow url from Page only one level deep and create two LinkedUrls if deep level is set to one"() {
+    def "should follow url one level deep and create three LinkedUrls"() {
         given:
         def sourceUrl = new URL("http://www.first.pl")
 
@@ -18,12 +18,13 @@ abstract class CrawlerTest extends Specification {
         List<LinkedUrl> result = getCrawler(1, stubPageDownloader(), new RegexUrlFinder()).crawl(sourceUrl)
 
         then:
-        result.size() == 2
+        result.size() == 3
+        result.contains new LinkedUrl("http://www.first.pl")
         result.contains new LinkedUrl(new URL("http://www.secondA.pl"), new LinkedUrl("http://www.first.pl"))
         result.contains new LinkedUrl(new URL("http://www.secondB.pl"), new LinkedUrl("http://www.first.pl"))
     }
 
-    def "should follow url from Page two level deep and create six LinkedUrls"() {
+    def "should follow url two level deep and create seven LinkedUrls"() {
         given:
         def sourceUrlString = "http://www.first.pl"
         def sourceUrl = new URL(sourceUrlString)
@@ -32,7 +33,8 @@ abstract class CrawlerTest extends Specification {
         List<LinkedUrl> result = getCrawler(2, stubPageDownloader(), new RegexUrlFinder()).crawl(sourceUrl)
 
         then:
-        result.size() == 6
+        result.size() == 7
+        result.contains new LinkedUrl("http://www.first.pl")
         result.contains new LinkedUrl("http://www.secondA.pl", sourceUrlString)
         result.contains new LinkedUrl("http://www.secondB.pl", sourceUrlString)
         result.contains new LinkedUrl("http://www.thirdA.pl", new LinkedUrl("http://www.secondA.pl", sourceUrlString))
@@ -41,7 +43,7 @@ abstract class CrawlerTest extends Specification {
         result.contains new LinkedUrl("http://www.thirdB.pl", new LinkedUrl("http://www.secondB.pl", sourceUrlString))
     }
 
-    def "should follow url from Page three level deep and create six LinkedUrls"() {
+    def "should follow url three level deep and create eleven LinkedUrls"() {
         given:
         def sourceUrlString = "http://www.first.pl"
         def sourceUrl = new URL(sourceUrlString)
@@ -50,7 +52,8 @@ abstract class CrawlerTest extends Specification {
         List<LinkedUrl> result = getCrawler(3, stubPageDownloader(), new RegexUrlFinder()).crawl(sourceUrl)
 
         then:
-        result.size() == 10
+        result.size() == 11
+        result.contains new LinkedUrl("http://www.first.pl")
         result.contains new LinkedUrl("http://www.secondA.pl", sourceUrlString)
         result.contains new LinkedUrl("http://www.secondB.pl", sourceUrlString)
         result.contains new LinkedUrl("http://www.thirdA.pl", new LinkedUrl("http://www.secondA.pl", sourceUrlString))
@@ -118,8 +121,6 @@ abstract class CrawlerTest extends Specification {
                 if (url.equals(new URL("http://www.fourth.pl"))) {
                     return 'garbage'
                 }
-
-
                 return ""
             }
         }

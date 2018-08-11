@@ -20,9 +20,12 @@ public class SingleThreadCrawler implements Crawler{
     }
 
     @Override
-    public List<LinkedUrl> crawl(URL url) {
-        System.out.println("Depth:0 Crawling root page:" + url);
-        return crawlWithDepth(new LinkedUrl(url), 1);
+    public List<LinkedUrl> crawl(URL rootUrl) {
+        System.out.println("Depth:0 Crawling root page:" + rootUrl);
+        LinkedUrl root = new LinkedUrl(rootUrl);
+        List<LinkedUrl> result = crawlWithDepth(root, 1);
+        result.add(root);
+        return result;
     }
 
 
