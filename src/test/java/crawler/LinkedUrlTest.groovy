@@ -1,16 +1,18 @@
+package crawler
+
 import spock.lang.Specification
 
 class LinkedUrlTest extends Specification {
 
     def "shouldCreate LinkedUrl for all passed Urls"() {
         given:
-        def parentUrl = new URL("http://karolnowak.net")
+        LinkedUrl parentUrl = new LinkedUrl("http://karolnowak.net")
         def urls = [new URL("http://google.de"),
                     new URL("http://google.com"),
                     new URL("http://google.pl")]
 
         when:
-        def result = LinkedUrl.createFromParent(parentUrl, urls)
+        def result = parentUrl.createFromParent(urls)
 
         then:
         result.size() ==  3

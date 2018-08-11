@@ -1,10 +1,12 @@
+package crawler;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-class LinkedUrl {
+public class LinkedUrl {
     private final URL url;
     private final LinkedUrl parentUrl;
 
@@ -20,15 +22,17 @@ class LinkedUrl {
         this(new URL(url), new LinkedUrl(parentUrl));
     }
 
+    LinkedUrl(String url, LinkedUrl linkedUrl) throws MalformedURLException {
+        this(new URL(url), linkedUrl);
+    }
+
     LinkedUrl(String url) throws MalformedURLException {
         this(new URL(url), null);
     }
 
-
-    public static List<LinkedUrl> createFromParent(URL parent, List<URL> urls) {
-        LinkedUrl rootParentUrl = new LinkedUrl(parent);
-        return urls.stream()
-                .map(url -> new LinkedUrl(url, rootParentUrl))
+    public List<LinkedUrl> createFromParent(List<URL> urlsOnPage) {
+        return urlsOnPage.stream()
+                .map(url -> new LinkedUrl(url, this))
                 .collect(Collectors.toList());
     }
 
@@ -43,11 +47,11 @@ class LinkedUrl {
         LinkedUrl linkedUrl = (LinkedUrl) o;
         return Objects.equals(url, linkedUrl.url) && Objects.equals(parentUrl, linkedUrl.parentUrl);
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(url, parentUrl);
     }
+
     //TODO handle cycle
 
     @Override
