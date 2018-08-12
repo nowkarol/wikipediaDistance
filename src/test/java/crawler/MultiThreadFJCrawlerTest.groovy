@@ -3,9 +3,9 @@ package crawler
 import downloader.PageDownloader
 import finder.UrlFinder
 
-class ForkJoinCrawlerThresholdTwoTest extends CrawlerTest {
+class MultiThreadFJCrawlerTest extends CrawlerTest{
     @Override
     Crawler getCrawler(int maxDepth, PageDownloader downloader, UrlFinder urlFinder) {
-        return new ForkJoinCrawler(maxDepth, downloader, urlFinder, 2)
+        return new MultiThreadFJCrawler(maxDepth, downloader, urlFinder)
     }
 }
