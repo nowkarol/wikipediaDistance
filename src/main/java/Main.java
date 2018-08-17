@@ -1,10 +1,8 @@
 import crawler.Crawler;
 import crawler.LinkedUrl;
 import crawler.MultiThreadFJCrawler;
-import downloader.CachedPageDownloader;
-import downloader.PageDownloader;
+import downloader.CachedDownloaderAndFinder;
 import downloader.SimplePageDownloader;
-import finder.CachedUrlFinder;
 import finder.RegexUrlFinder;
 
 import java.net.MalformedURLException;
@@ -17,12 +15,13 @@ public class Main {
     public static void main(String[] args) throws MalformedURLException {
         LocalTime start = LocalTime.now();
 
-        final URL url = new URL("https://www.wp.pl");
+        final URL url = new URL("https://www.google.pl");
         SimplePageDownloader downloader = new SimplePageDownloader();
-        PageDownloader cachedDownloader = new CachedPageDownloader(downloader);
         RegexUrlFinder regexUrlFinder = new RegexUrlFinder();
 
-        Crawler crawler = new MultiThreadFJCrawler(2, cachedDownloader, regexUrlFinder);
+        CachedDownloaderAndFinder cachedDownloaderAndFinder = new CachedDownloaderAndFinder(downloader, regexUrlFinder);
+
+        Crawler crawler = new MultiThreadFJCrawler(4, cachedDownloaderAndFinder, cachedDownloaderAndFinder);
         List<LinkedUrl> result = crawler.crawl(url);
 
         result.forEach(System.out::println);
