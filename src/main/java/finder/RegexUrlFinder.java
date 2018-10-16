@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegexUrlFinder implements UrlFinder {
-    private Pattern url = Pattern.compile("\"http://\\S+\"");
+    private Pattern url = Pattern.compile("\"http(s)?://[0-9a-zA-Z./$-_+!*'(),]+\"");
 
     @Override
     public List<URL> findAll(String pageContent) {
