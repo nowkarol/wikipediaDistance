@@ -24,8 +24,8 @@ public class Main {
         Crawler crawler = new MultiThreadFJCrawler(4, cachedDownloaderAndFinder, cachedDownloaderAndFinder);
         List<LinkedUrl> result = crawler.crawl(url);
 
-        result.forEach(System.out::println);
-
+        UrlTree urlTree = new UrlTree(result);
+        System.out.println(urlTree);
         LocalTime end = LocalTime.now();
         long time = ChronoUnit.MILLIS.between(start, end);
         System.out.format("%d urls was parsed in %d MS ", result.size(), time);

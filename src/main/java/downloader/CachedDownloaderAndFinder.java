@@ -43,8 +43,4 @@ public class CachedDownloaderAndFinder implements PageDownloader, UrlFinder {
         }
         throw new IllegalStateException("You have to use downloading method from this class first");
     }
-
-    public static void main(String[] args) throws MalformedURLException {
-        System.out.println(new URL("http://www.google.pl"));
-    }
 }

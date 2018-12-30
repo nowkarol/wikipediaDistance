@@ -40,6 +40,21 @@ public class LinkedUrl {
         return url;
     }
 
+    public boolean isRoot() {
+        return parentUrl == null;
+    }
+
+    public boolean isChildOf(URL parentUrl) {
+        if (this.parentUrl == null){
+            return false;
+        }
+        return Objects.equals(this.parentUrl.getUrl(), parentUrl);
+    }
+
+    public LinkedUrl getParentUrl() {
+        return parentUrl;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
