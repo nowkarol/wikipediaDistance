@@ -30,29 +30,8 @@ public class LinkedUrl {
         this(new URL(url), null);
     }
 
-    public List<LinkedUrl> createFromParent(List<URL> urlsOnPage) {
-        return urlsOnPage.stream()
-                .map(url -> new LinkedUrl(url, this))
-                .collect(Collectors.toList());
-    }
-
     public URL getUrl() {
         return url;
-    }
-
-    public boolean isRoot() {
-        return parentUrl == null;
-    }
-
-    public boolean isChildOf(URL parentUrl) {
-        if (this.parentUrl == null){
-            return false;
-        }
-        return Objects.equals(this.parentUrl.getUrl(), parentUrl);
-    }
-
-    public LinkedUrl getParentUrl() {
-        return parentUrl;
     }
 
     @Override
@@ -67,10 +46,19 @@ public class LinkedUrl {
         return Objects.hash(url, parentUrl);
     }
 
-    //TODO handle cycle
 
     @Override
     public String toString() {
-        return "LinkedUrl{" + "url=" + url + ", parentUrl=" + parentUrl + '}';
+        if (parentUrl == null){
+            return url.toString();
+        }
+        return url.toString() + " <- " + parentUrl.toString();
+    }
+
+    public int getDepth() {
+        if (parentUrl == null) {
+            return 0;
+        }
+        return parentUrl.getDepth() + 1;
     }
 }

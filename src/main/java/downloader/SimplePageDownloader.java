@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 public class SimplePageDownloader implements PageDownloader{
+    public static long counter = 0;
     @Override
     public String downloadContent(URL url) {
         StringBuilder site = new StringBuilder();
@@ -16,8 +17,10 @@ public class SimplePageDownloader implements PageDownloader{
                 site.append(line);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
         }
+        String result = site.toString();
+        counter+=result.getBytes().length;
         return site.toString();
     }
 
