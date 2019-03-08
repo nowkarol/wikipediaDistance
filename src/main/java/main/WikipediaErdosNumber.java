@@ -16,7 +16,7 @@ public class WikipediaErdosNumber {
     private static final String WIKIPEDIA = "https://pl.wikipedia.org/wiki/";
 
     public static void main(String[] args) throws MalformedURLException {
-        if (args.length > 2){
+        if (args.length != 2){
             System.out.println("Usage: \"Starting Article Title\" \"Searched Phrase\" ");
             System.out.println("For example: \"Ryszard Rynkowski\" \"Aikido\" ");
             return;

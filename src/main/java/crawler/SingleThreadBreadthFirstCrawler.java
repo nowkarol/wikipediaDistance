@@ -1,14 +1,14 @@
 package crawler;
 
 import downloader.PageDownloader;
-import finder.CachedWordFinder;
 import finder.UrlFinder;
-import finder.SimpleWordFinder;
 import finder.WordFinder;
 
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
@@ -39,15 +39,16 @@ public class SingleThreadBreadthFirstCrawler implements Crawler{
 
 
     private List<LinkedUrl> crawlWithDepth(LinkedUrl linkedUrl, String wordToFind) {
-        List<LinkedUrl> urlsToProcess = new ArrayList<>();
+        List<LinkedUrl> urlsToProcess = new LinkedList<>();
         urlsToProcess.add(linkedUrl);
-        List<URL> processedUrls = new ArrayList<>();
+        Set<URL> processedUrls = new HashSet<>();
 
         while (!urlsToProcess.isEmpty()) {
             counter++;
-            LinkedUrl currentLinkedUrl = urlsToProcess.get(0);
+            LinkedUrl currentLinkedUrl = urlsToProcess.remove(0);
             URL url = currentLinkedUrl.getUrl();
-            urlsToProcess.remove(0);
+            System.out.println("Crawling page: " + currentLinkedUrl);
+
             if (processedUrls.contains(url)){
                 continue;
             }
@@ -59,9 +60,7 @@ public class SingleThreadBreadthFirstCrawler implements Crawler{
 
             List<URL> urlsOnPage = urlFinder.findAll(pageContent);
             List<LinkedUrl> urlsFromThisLevel = urlsOnPage.stream()
-                    .unordered()
                     .map(processedUrl -> new LinkedUrl(processedUrl, currentLinkedUrl))
-                    .peek(urlToProcess -> System.out.println("Crawling page: " + urlToProcess))
                     .collect(Collectors.toList());
 
             urlsToProcess.addAll(urlsFromThisLevel);
