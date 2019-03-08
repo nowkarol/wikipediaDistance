@@ -103,6 +103,11 @@ abstract class CrawlerTest extends Specification {
                 return ""
 
             }
+
+            @Override
+            int getMbDownloaded() {
+                return -1
+            }
         }
         when:
         List<LinkedUrl> result = getCrawler(stubDownloaderWithCycle, new RegexUrlFinder(), new SimpleWordFinder())
@@ -134,6 +139,12 @@ abstract class CrawlerTest extends Specification {
                     return 'garbage'
                 }
                 return ""
+
+            }
+
+            @Override
+            int getMbDownloaded() {
+                return -1
             }
         }
 

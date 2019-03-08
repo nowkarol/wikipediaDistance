@@ -5,4 +5,6 @@ import java.util.List;
 
 public interface Crawler {
     List<LinkedUrl> crawl(URL url, String endingWord);
+
+    int getCounter();
 }

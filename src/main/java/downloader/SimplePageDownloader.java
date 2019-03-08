@@ -7,7 +7,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 public class SimplePageDownloader implements PageDownloader{
-    public static long counter = 0;
+    private static final long BYTES_PER_MEGABYTE = 1_000_000;
+    private long counter = 0;
     @Override
     public String downloadContent(URL url) {
         StringBuilder site = new StringBuilder();
@@ -24,4 +25,8 @@ public class SimplePageDownloader implements PageDownloader{
         return site.toString();
     }
 
+    @Override
+    public int getMbDownloaded() {
+        return (int) (counter / BYTES_PER_MEGABYTE);
+    }
 }

@@ -14,15 +14,15 @@ import java.util.stream.Collectors;
 import static java.util.Collections.singletonList;
 
 public class SingleThreadBreadthFirstCrawler implements Crawler{
-    public static int counter = 0;
+    private int counter = 0;
     private final PageDownloader downloader;
     private final UrlFinder urlFinder;
-    private CachedWordFinder wordFinder;
+    private WordFinder wordFinder;
 
     public SingleThreadBreadthFirstCrawler(PageDownloader downloader, UrlFinder urlFinder, WordFinder wordFinder) {
         this.downloader = downloader;
         this.urlFinder = urlFinder;
-        this.wordFinder = new CachedWordFinder(new SimpleWordFinder());
+        this.wordFinder = wordFinder;
     }
 
     @Override
@@ -30,6 +30,11 @@ public class SingleThreadBreadthFirstCrawler implements Crawler{
         System.out.println("Depth:0 Crawling root page:" + rootUrl);
         LinkedUrl root = new LinkedUrl(rootUrl);
         return crawlWithDepth(root, endingWord);
+    }
+
+    @Override
+    public int getCounter() {
+        return counter;
     }
 
 
@@ -63,6 +68,6 @@ public class SingleThreadBreadthFirstCrawler implements Crawler{
             processedUrls.add(url);
         }
         throw new IllegalStateException("Either you typed non existing start article " +
-                "(watch case in names with multiple words) or You reached end of internet.");
+                "(watch case in names with multiple words) or you reached end of the internet.");
     }
 }

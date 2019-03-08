@@ -12,8 +12,6 @@ import java.net.URL;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-import static crawler.SingleThreadBreadthFirstCrawler.counter;
-
 public class WikipediaErdosNumber {
     private static final String WIKIPEDIA = "https://pl.wikipedia.org/wiki/";
 
@@ -35,15 +33,15 @@ public class WikipediaErdosNumber {
         Crawler crawler = new SingleThreadBreadthFirstCrawler(downloader, regexUrlFinder, wordFinder);
         LinkedUrl result = crawler.crawl(startingUrl, args[1]).get(0);
         LocalTime endTime = LocalTime.now();
-        displayResult(startTime, endTime, result);
+        displayResult(startTime, endTime, result, crawler.getCounter(), downloader.getMbDownloaded());
     }
 
-    private static void displayResult(LocalTime start, LocalTime end, LinkedUrl result) {
+    private static void displayResult(LocalTime start, LocalTime end, LinkedUrl result, int pageCounter, int mbDownloaded) {
         long time = ChronoUnit.MILLIS.between(start, end);
         System.out.println();
         System.out.println();
         System.out.format("Found Path with depth %d in %d MS after looking at %d pages and downloading %d MB\n\n"
-                , result.getDepth(), time, counter, SimplePageDownloader.counter/1000000);
+                , result.getDepth(), time, pageCounter, mbDownloaded);
         System.out.println("=================================================================================");
         System.out.println(result);
     }
